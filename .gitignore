@@ -1,4 +1,6 @@
 __pycache__
 Data/wavs
 venv/
-Models/LJSpeech
+Train_log/
+Models/**
+.gradio

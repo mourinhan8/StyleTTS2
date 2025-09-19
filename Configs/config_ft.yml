@@ -1,4 +1,4 @@
-log_dir: "Models/LJSpeech"
+log_dir: "Train_log"
 save_freq: 5
 log_interval: 10
 device: "cuda"
