@@ -612,8 +612,8 @@ def main(config_path):
                         s = model.style_encoder(mel.unsqueeze(0).unsqueeze(1))
                         gs.append(s)
 
-                    s = torch.stack(ss).squeeze()
-                    gs = torch.stack(gs).squeeze()
+                    s = torch.stack(ss).squeeze(1)
+                    gs = torch.stack(gs).squeeze(1)
                     s_trg = torch.cat([s, gs], dim=-1).detach()
 
                     bert_dur = model.bert(texts, attention_mask=(~text_mask).int())
@@ -681,7 +681,10 @@ def main(config_path):
                     continue
 
         print('Epochs:', epoch + 1)
-        logger.info('Validation loss: %.3f, Dur loss: %.3f, F0 loss: %.3f' % (loss_test / iters_test, loss_align / iters_test, loss_f / iters_test) + '\n\n\n')
+        if iters_test > 0:
+            logger.info('Validation loss: %.3f, Dur loss: %.3f, F0 loss: %.3f' % (loss_test / iters_test, loss_align / iters_test, loss_f / iters_test) + '\n\n\n')
+        else:
+            logger.info('Validation failed for all batches. No validation loss to report.')
         print('\n\n\n')
         writer.add_scalar('eval/mel_loss', loss_test / iters_test, epoch + 1)
         writer.add_scalar('eval/dur_loss', loss_test / iters_test, epoch + 1)
